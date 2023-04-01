@@ -12,15 +12,6 @@ export class UserService implements IUserService {
   constructor(userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
-  async getUsers(): Promise<User[]> {
-    const users = await this.userRepository.getUsers();
-    console.log(users.length);
-    if (users.length == 0) {
-      throw Error("User list is empty");
-    }
-
-    return users;
-  }
 
   async createUser(user: IUser): Promise<User> {
     if (!user.name) {
@@ -33,5 +24,15 @@ export class UserService implements IUserService {
     const createUser = await this.userRepository.createUser(user);
     console.log(`Created user: ${JSON.stringify(user)}`);
     return createUser;
+  }
+
+  async getUsers(): Promise<User[]> {
+    const users = await this.userRepository.getUsers();
+    console.log(users.length);
+    if (users.length == 0) {
+      throw Error("User list is empty");
+    }
+
+    return users;
   }
 }
