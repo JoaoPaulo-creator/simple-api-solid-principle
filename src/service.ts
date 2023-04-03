@@ -1,16 +1,21 @@
 import { User } from "@prisma/client";
 import { IUser, IUserRepository } from "./repository";
+import { IEmailValidation } from "./utils/email-validation";
 
 export interface IUserService {
   createUser(user: IUser): Promise<User>;
   getUsers(): Promise<User[]>;
 }
 
-export class UserService implements IUserService {
+export class UserService implements IUserService, IEmailValidation {
   private userRepository: IUserRepository;
 
   constructor(userRepository: IUserRepository) {
     this.userRepository = userRepository;
+  }
+  validateEmail(email: string): boolean {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
   }
 
   async createUser(user: IUser): Promise<User> {
@@ -21,6 +26,11 @@ export class UserService implements IUserService {
     if (!user.email) {
       throw new Error("Email is required");
     }
+
+    if (!this.validateEmail(user.email)) {
+      throw new Error("Invalid email");
+    }
+
     const createUser = await this.userRepository.createUser(user);
     console.log(`Created user: ${JSON.stringify(user)}`);
     return createUser;
