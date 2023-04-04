@@ -10,4 +10,4 @@ const userService = new UserService(userRepo);
 const userController = new UserController(userService);
 
 router.post("/", userController.createUser.bind(userController));
-router.get("/", userController.findAll.bind(userController));
+router.get("/users", userController.findAll.bind(userController));

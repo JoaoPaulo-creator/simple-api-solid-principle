@@ -43,6 +43,8 @@ export class UserService implements IUserService, IEmailValidation {
       throw Error("User list is empty");
     }
 
-    return users;
+    let filteredUsers = users.filter((user) => !user.name.includes("Andre"));
+
+    return filteredUsers;
   }
 }
